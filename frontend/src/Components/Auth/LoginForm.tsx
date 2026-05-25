@@ -2,23 +2,41 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { useAuth } from "../../hooks/useAuth";
-
+import { useNavigate } from "react-router-dom";
 export default function LoginForm() {
   const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate=useNavigate();
 
-  const handleSubmit = async (
-    e: React.FormEvent
-  ) => {
+ const handleSubmit=async(
+    e:React.FormEvent
+  )=>{
+
     e.preventDefault();
 
-    try {
-      await login(email, password);
-    } catch {
-      alert("Connexion impossible");
+    try{
+
+      await login(
+        email,
+        password
+      );
+
+      navigate(
+        "/dashboard"
+      );
+
     }
+
+    catch{
+
+      alert(
+        "Connexion impossible"
+      );
+
+    }
+
   };
 
   return (
@@ -57,8 +75,13 @@ export default function LoginForm() {
         />
       </div>
 
-      <button className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700">
+     <button
+        type="submit"
+        className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-all"
+      >
+
         Se connecter
+
       </button>
 
       <p className="text-center text-sm">

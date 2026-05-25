@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
 
 import {
   FaUser,
@@ -18,6 +19,7 @@ export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+
   const {
     register,
     handleSubmit,
@@ -33,9 +35,21 @@ export default function RegisterForm() {
   const email = watch("email");
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");
+  const navigate = useNavigate();
 
-  const onSubmit = (data: RegisterFormData) => {
-    console.log("Données valides :", data);
+  const onSubmit = async(
+    data:RegisterFormData
+  )=>{
+
+    console.log(
+      "Données valides :",
+      data
+    );
+
+    navigate(
+      "/login"
+    );
+
   };
 
   // 🎨 LOGIQUE COULEUR SAAS
