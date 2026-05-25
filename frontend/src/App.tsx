@@ -1,37 +1,43 @@
+// App.tsx
+
 import {
   BrowserRouter,
   Routes,
-  Route,
-  Navigate
-} from "react-router-dom";
+  Route
+}
+from "react-router-dom";
 
+import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
-function App() {
-  return (
+export default function App(){
+
+  return(
+
     <BrowserRouter>
+
       <Routes>
 
-        {/* route par défaut */}
         <Route
           path="/"
-          element={<Navigate to="/login" />}
+          element={<Landing/>}
         />
 
         <Route
           path="/login"
-          element={<Login />}
+          element={<Login/>}
         />
 
         <Route
           path="/register"
-          element={<Register />}
+          element={<Register/>}
         />
 
       </Routes>
-    </BrowserRouter>
-  );
-}
 
-export default App;
+    </BrowserRouter>
+
+  )
+
+}
