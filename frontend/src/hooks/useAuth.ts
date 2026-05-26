@@ -1,48 +1,72 @@
-
 import { useEffect, useState } from "react";
 import api from "../services/api";
 
 interface User {
   id: string;
   name: string;
+  firstname: string;
   email: string;
   role: string;
 }
 
+interface LoginResponse {
+  access_token: string;
+}
+
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  //  hydrate user depuis localStorage (JWT existant)
   useEffect(() => {
+    let isMounted = true; // Sécurité pour éviter les fuites de mémoire sur les composants démontés
     const token = localStorage.getItem("token");
+
     if (token) {
-      api.get("/auth/me")
-        .then((res) => setUser(res.data))
+      api.get<User>("/auth/me")
+        .then((res) => {
+          if (isMounted) {
+            setUser(res.data);
+          }
+        })
         .catch(() => {
-          localStorage.removeItem("token");
+          if (isMounted) {
+            localStorage.removeItem("token");
+          }
+        })
+        .finally(() => {
+          if (isMounted) {
+            setLoading(false); // S'exécute de manière asynchrone après le retour de l'API
+          }
         });
+    } else {
+      // 🎯 CORRECTION : Utilisation de setTimeout pour basculer l'état au cycle d'événement suivant
+      // Cela évite de bloquer ou de forcer un rendu en cascade pendant le montage initial
+      const timer = setTimeout(() => {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }, 0);
+
+      return () => clearTimeout(timer);
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  const login = async (email: string, password: string) => {
-    const response = await api.post("/auth/login", { email, password });
+  const login = async (email: string, password: string): Promise<User> => {
+    const response = await api.post<LoginResponse>("/auth/login", { email, password });
+    const { access_token } = response.data;
 
-    const { token, user } = response.data;
+    localStorage.setItem("token", access_token);
 
-    localStorage.setItem("token", token);
-    setUser(user);
+    const profileResponse = await api.get<User>("/auth/me");
+    const loggedInUser = profileResponse.data;
 
-    return user;
-  };
-
-  const register = async (name: string, email: string, password: string) => {
-    const response = await api.post("/auth/register", {
-      name,
-      email,
-      password,
-    });
-
-    return response.data;
+    setUser(loggedInUser);
+    setLoading(false);
+    return loggedInUser;
   };
 
   const logout = () => {
@@ -50,5 +74,5 @@ export function useAuth() {
     setUser(null);
   };
 
-  return { user, login, register, logout };
+  return { user, login, logout, loading };
 }

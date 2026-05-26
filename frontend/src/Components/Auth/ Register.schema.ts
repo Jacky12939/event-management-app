@@ -2,7 +2,10 @@ import { z } from "zod";
 
 export const registerSchema = z
   .object({
-    name: z.string().min(2, "Nom trop court"),
+    // Séparation du champ 'name' en 'nom' et 'prenom' requis par NestJS/Prisma
+    nom: z.string().min(2, "Nom trop court"),
+    
+    prenom: z.string().min(2, "Prénom trop court"),
 
     email: z
       .string()
