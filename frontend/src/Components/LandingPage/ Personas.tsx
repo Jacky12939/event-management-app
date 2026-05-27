@@ -3,7 +3,7 @@
 const personas=[
 
   {
-    emoji:"👩‍💼",
+  
     name:"Alice",
     role:"Organisatrice",
     description:"Crée et gère tous les événements depuis son tableau de bord.",
@@ -19,7 +19,7 @@ const personas=[
   },
 
   {
-    emoji:"👨‍🎓",
+
     name:"Bob",
     role:"Participant",
     description:"Recherche les événements disponibles et réserve sa place rapidement.",
@@ -35,7 +35,7 @@ const personas=[
   },
 
   {
-    emoji:"👮‍♀️",
+
     name:"Carla",
     role:"Responsable d'accès",
     description:"Contrôle les entrées et valide les billets des participants.",

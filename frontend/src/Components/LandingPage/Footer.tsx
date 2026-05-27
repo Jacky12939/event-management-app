@@ -12,7 +12,7 @@ export default function Footer(){
 
     <footer className="bg-slate-950 px-[8%] py-16">
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
 
         <div>
 
@@ -94,27 +94,6 @@ export default function Footer(){
 
         </div>
 
-        <div>
-
-          <h3 className="text-white font-bold mb-5">
-
-            Réseaux
-
-          </h3>
-
-          <div className="flex gap-4 text-white text-xl">
-
-            <FaFacebook/>
-
-            <FaTwitter/>
-
-            <FaInstagram/>
-
-            <FaLinkedin/>
-
-          </div>
-
-        </div>
 
       </div>
 
