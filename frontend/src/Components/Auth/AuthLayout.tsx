@@ -1,50 +1,67 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import {FaMoon, FaSun } from "react-icons/fa";
+import { FaMoon, FaSun } from "react-icons/fa";
 import { useTheme } from "../../context/ThemeContext";
+import img1 from "../../assets/img1.jpg";
 import logo from "../../assets/logo.png";
 
-interface Props{
-  children:ReactNode;
+
+interface Props {
+  children: ReactNode;
 }
 
 export default function AuthLayout({
-  children
-}:Props){
+  children,
+}: Props) {
 
   const {
     darkMode,
     toggleTheme
-  }=useTheme();
+  } = useTheme();
 
-  return(
+  return (
 
-    <div className="min-h-screen bg-slate-100 dark:bg-[#0f172a] transition-all">
+    <div className="relative min-h-screen overflow-hidden">
 
-      {/* Navbar */}
+      {/* Background image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: `url(${img1})`,
+        }}
+      />
 
-      <nav className="flex items-center justify-between px-[8%] py-5 bg-white dark:bg-slate-900 shadow-sm border-b border-slate-200 dark:border-slate-800">
+      {/* Overlay transparent */}
+      <div className="absolute inset-0 bg-black/45 dark:bg-black/60" />
 
-        <Link
-          to="/"
-          className="flex items-center gap-3"
-        >
+      {/* Contenu */}
+      <div className="relative z-10">
 
-          <div className="flex items-center">
-            <div>
-              <img src={logo} alt="logo" className="h-12 w-auto object-contain" />
+        {/* Navbar */}
+        <nav className="flex items-center justify-between px-[8%] py-5 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md shadow-sm border-b border-slate-200 dark:border-slate-800">
+
+          <Link
+            to="/"
+            className="flex items-center gap-3"
+          >
+
+            <div className="flex items-center">
+
+              <div>
+                <img
+                  src={logo}
+                  alt="logo"
+                  className="h-12 w-auto object-contain"
+                />
+              </div>
+
+              <h1 className="font-extrabold text-xl dark:text-white -ml-6">
+                EventFlow
+              </h1>
+
             </div>
-          
-            <h1 className="font-extrabold text-xl dark:text-white -ml-6">
-              EventFlow
-            </h1>
-          </div>
 
-        </Link>
-
-        <div className="flex items-center gap-4">
-
-         
+          </Link>
 
           <button
             onClick={toggleTheme}
@@ -52,28 +69,23 @@ export default function AuthLayout({
           >
 
             {
-
               darkMode
-              ?
-              <FaSun/>
-              :
-              <FaMoon/>
-
+                ? <FaSun />
+                : <FaMoon />
             }
 
           </button>
 
-        </div>
+        </nav>
 
-      </nav>
+        {/* Form */}
+        <div className="flex items-center justify-center px-6 py-12">
 
-      {/* Form */}
+          <div className="w-full max-w-md bg-white/80 dark:bg-[#1e293b]/80 backdrop-blur-md dark:text-white rounded-2xl shadow-lg p-8 transition-all">
 
-      <div className="flex items-center justify-center px-6 py-12">
+            {children}
 
-        <div className="w-full max-w-md bg-white dark:bg-[#1e293b] dark:text-white rounded-2xl shadow-lg p-8 transition-all">
-
-          {children}
+          </div>
 
         </div>
 
@@ -81,6 +93,6 @@ export default function AuthLayout({
 
     </div>
 
-  )
+  );
 
 }

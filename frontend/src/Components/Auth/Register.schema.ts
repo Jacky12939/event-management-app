@@ -1,10 +1,15 @@
+// =============================================================
+// src/Components/Auth/Register.schema.ts
+// Schéma de validation Zod pour le formulaire d'inscription
+// Ce fichier était correct — aucune modification du contenu
+// Seul le nom de fichier (avec espace) était problématique
+// =============================================================
+
 import { z } from "zod";
 
 export const registerSchema = z
   .object({
-    // Séparation du champ 'name' en 'nom' et 'prenom' requis par NestJS/Prisma
     nom: z.string().min(2, "Nom trop court"),
-    
     prenom: z.string().min(2, "Prénom trop court"),
 
     email: z
