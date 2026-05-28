@@ -1,14 +1,12 @@
 // =============================================================
 // prisma/schema.prisma
-// Prisma v7 : la connexion DB n'est PLUS déclarée ici
-// Elle est dans prisma.config.ts
+// Prisma v7
 // =============================================================
 
 generator client {
   provider = "prisma-client-js"
 }
 
-// ✅ Prisma v7 : datasource sans "url", la connexion passe par prisma.config.ts
 datasource db {
   provider = "postgresql"
 }
@@ -18,13 +16,53 @@ enum Role {
   organizer
 }
 
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+  COMPLETED
+}
+
 model User {
   id        String   @id @default(uuid())
+
   nom       String
   prenom    String
+
   email     String   @unique
   password  String
+
   role      Role     @default(attendee)
+
+  // Relations
+  events    Event[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Event {
+  id          String      @id @default(uuid())
+
+  title       String
+  description String
+
+  date        DateTime
+  time        String
+
+  location    String
+  category    String
+
+  capacity    Int
+
+  image       String?
+
+  status      EventStatus @default(DRAFT)
+
+  // Relation organisateur
+  organizerId String
+  organizer   User @relation(fields: [organizerId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

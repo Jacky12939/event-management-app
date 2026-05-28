@@ -19,3 +19,5 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter } as any);
 
 export default prisma;
+
+
