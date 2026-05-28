@@ -1,30 +1,31 @@
-// =============================================================
-// prisma/schema.prisma
-// Prisma v7 : la connexion DB n'est PLUS déclarée ici
-// Elle est dans prisma.config.ts
-// =============================================================
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
-// ✅ Prisma v7 : datasource sans "url", la connexion passe par prisma.config.ts
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
+  url      = "postgresql://postgres:postgres@localhost:5432/eventdb?connection_limit=1"
 }
 
 enum Role {
   attendee
   organizer
+  admin
 }
 
 model User {
-  id        String   @id @default(uuid())
+  id        String         @id @default(uuid())
   nom       String
   prenom    String
-  email     String   @unique
+  email     String      @unique
   password  String
-  role      Role     @default(attendee)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  role      Role        @default(attendee)
+  createdAt DataTime    @default(now())
+  updatedAt DataTime    @updatedAt
 }
