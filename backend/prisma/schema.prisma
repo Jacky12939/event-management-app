@@ -9,8 +9,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = "postgresql://postgres:postgres@localhost:5432/eventdb?connection_limit=1"
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 enum Role {
@@ -26,6 +26,32 @@ model User {
   email     String      @unique
   password  String
   role      Role        @default(attendee)
-  createdAt DataTime    @default(now())
-  updatedAt DataTime    @updatedAt
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  events    Event[]
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+  COMPLETED
+}
+
+model Event {
+  id          String      @id @default(uuid())
+  title       String
+  description String
+  date        DateTime
+  location    String
+  time        String
+  capacity    Int
+  image       String?
+  status      EventStatus @default(DRAFT)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relation avec l'organisateur (User)
+  organizerId String
+  organizer   User        @relation(fields: [organizerId], references: [id])
 }

@@ -7,14 +7,13 @@
 //   - Import prisma corrigé (chemin sans espace)
 // =============================================================
 
-import { Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
-import prisma from '../lib/prisma'; // ✅ Corrigé : chemin sans espace
+import { Injectable } from "@nestjs/common";
+import * as bcrypt from "bcrypt";
+import * as jwt from "jsonwebtoken";
+import prisma from "../lib/prisma.js"; // ✅ Corrigé : chemin sans espace
 
 @Injectable()
 export class AuthService {
-
   /**
    * Inscription d'un nouvel utilisateur
    * Hache le mot de passe avant de l'enregistrer en base
@@ -28,7 +27,7 @@ export class AuthService {
     });
 
     if (existingUser) {
-      throw new Error('Email déjà utilisé');
+      throw new Error("Email déjà utilisé");
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -36,8 +35,8 @@ export class AuthService {
     // Crée l'utilisateur avec les champs alignés sur le schéma Prisma
     const user = await prisma.user.create({
       data: {
-        nom,     // ✅ Aligné avec schema.prisma
-        prenom,  // ✅ Aligné avec schema.prisma
+        nom, // ✅ Aligné avec schema.prisma
+        prenom, // ✅ Aligné avec schema.prisma
         email,
         password: hashedPassword,
       },
@@ -72,10 +71,10 @@ export class AuthService {
     const payload = { email: user.email, sub: user.id };
 
     const jwtSecret: string =
-      process.env.JWT_SECRET || 'CLE_SECRET_PAR_DEFAUT_A_REMPLACER';
+      process.env.JWT_SECRET || "CLE_SECRET_PAR_DEFAUT_A_REMPLACER";
 
     return {
-      access_token: jwt.sign(payload, jwtSecret, { expiresIn: '1h' }),
+      access_token: jwt.sign(payload, jwtSecret, { expiresIn: "1h" }),
     };
   }
 
@@ -89,7 +88,7 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new Error('Utilisateur introuvable');
+      throw new Error("Utilisateur introuvable");
     }
 
     // On ne retourne jamais le mot de passe
