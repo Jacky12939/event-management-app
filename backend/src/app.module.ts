@@ -3,10 +3,11 @@ import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/c
 import { AuthService } from './services/authService';   // 💡 Ajuste le chemin vers ton service s'il est ailleurs
 import { AuthController } from './routes/auth';
 import { AuthMiddleware } from './middleware/AuthMiddleware';
+import { EventsController } from './routes/events';
 
 @Module({
   imports: [], // Laisse tes autres modules ici (ex: TypeOrmModule, ConfigModule) si tu en as
-  controllers: [ AuthController], // Ton AuthController est déclaré ici directement
+  controllers: [ AuthController,  EventsController], // Ton AuthController est déclaré ici directement
   providers: [AuthService],         // Ton AuthService est déclaré ici directement
 })
 export class AppModule implements NestModule {
