@@ -10,7 +10,7 @@ generator client {
 
 // ✅ Prisma v7 : datasource sans "url", la connexion passe par prisma.config.ts
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
 }
 
 enum Role {

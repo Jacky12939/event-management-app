@@ -5,17 +5,9 @@
 // vers le client réellement généré dans node_modules/.prisma/client
 // =============================================================
 
-import { PrismaClient } from '@prisma/client';
-import { Pool } from 'pg';
-import { PrismaPg } from '@prisma/adapter-pg';
-import 'dotenv/config';
+import { PrismaClient } from "@prisma/client";
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
-
-const adapter = new PrismaPg(pool);
-
-const prisma = new PrismaClient({ adapter } as any);
+// Utilise l'initialisation standart en local :
+export const prisma = new PrismaClient();
 
 export default prisma;
