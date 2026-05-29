@@ -1,6 +1,9 @@
 // =============================================================
 // prisma/schema.prisma
-// Prisma v7
+// Prisma v7 — CORRIGÉ
+// Corrections :
+//   - Ajout du champ "price" dans Event (était absent, causait crash à la création)
+//   - datasource url ajouté (obligatoire en v7 sans prisma.config)
 // =============================================================
 
 generator client {
@@ -9,6 +12,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+ 
 }
 
 enum Role {
@@ -53,6 +57,7 @@ model Event {
   location    String
   category    String
 
+  price       Float       @default(0)   // ✅ AJOUTÉ — était absent, crashait à la création
   capacity    Int
 
   image       String?

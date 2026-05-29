@@ -7,9 +7,11 @@ import {
   Patch,
   Post,
   Query,
+  Req,
+  UnauthorizedException,
 } from '@nestjs/common';
-// 1. Ajoute l'import de ApiBody tout en haut
-import { ApiBody, ApiTags } from '@nestjs/swagger'; 
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
 
 import {
   createEvent,
@@ -21,109 +23,99 @@ import {
   updateEventStatus,
 } from '../services/eventService';
 
-@ApiTags('Events') // Optionnel : pour regrouper tes routes proprement dans Swagger
+@ApiTags('Events')
 @Controller('events')
 export class EventsController {
-  // ============================================
-  // CREATE EVENT
-  // ============================================
+
+
 
   @Post()
-  // 2. On dit explicitement à Swagger à quoi doit ressembler le JSON attendu
+  @ApiBearerAuth()
   @ApiBody({
     schema: {
       type: 'object',
       properties: {
-        title: { type: 'string', example: 'Mon super événement' },
-        description: { type: 'string', example: 'Une description détaillée' },
-        date: { type: 'string', example: '2026-06-15T18:00:00.000Z' },
-        location: { type: 'string', example: 'Yaoundé, Cameroun' },
-        price: { type: 'number', example: 0 },
-        capacity: { type: 'number', example: 100 },
-        organizerId: { type: 'string', example: 'clx123abc456' }, // Très important car ton service l'attend !
+        title:       { type: 'string',  example: 'Mon super événement' },
+        description: { type: 'string',  example: 'Une description détaillée' },
+        date:        { type: 'string',  example: '2026-06-15' },
+        time:        { type: 'string',  example: '18:00' },
+        location:    { type: 'string',  example: 'Yaoundé, Cameroun' },
+        category:    { type: 'string',  example: 'Concert' },
+        capacity:    { type: 'number',  example: 100 },
+        image:       { type: 'string',  example: 'https://...' },
       },
-      required: ['title', 'date', 'organizerId'], // Les champs obligatoires
+      required: ['title', 'description', 'date', 'time', 'location', 'category', 'capacity'],
     },
   })
   async create(
     @Body() body: any,
+    @Req() req: Request,
   ) {
-    return createEvent(
-      body,
-      body.organizerId,
-    );
+    const organizerId = (req as any).user?.sub;
+
+    if (!organizerId) {
+      throw new UnauthorizedException("Impossible d'identifier l'organisateur");
+    }
+
+    
+    const eventData = {
+      ...body,
+      date: new Date(body.date).toISOString(),
+    };
+
+    
+    delete eventData.organizerId;
+
+    return createEvent(eventData, organizerId);
   }
 
-  // ============================================
-  // GET EVENTS
-  // ============================================
+  
 
   @Get()
-  async findAll(
-    @Query() query: any,
-  ) {
+  async findAll(@Query() query: any) {
     return getEvents(query);
   }
 
-  // ============================================
-  // GET ORGANIZER EVENTS
-  // ============================================
+ 
 
   @Get('organizer/:id')
-  async organizerEvents(
-    @Param('id') id: string,
-  ) {
+  @ApiBearerAuth()
+  async organizerEvents(@Param('id') id: string) {
     return getOrganizerEvents(id);
   }
 
-  // ============================================
-  // GET ONE EVENT
-  // ============================================
 
   @Get(':id')
-  async findOne(
-    @Param('id') id: string,
-  ) {
+  async findOne(@Param('id') id: string) {
     return getEventById(id);
   }
 
-  // ============================================
-  // UPDATE EVENT
-  // ============================================
+
 
   @Patch(':id')
+  @ApiBearerAuth()
   async update(
     @Param('id') id: string,
-
     @Body() body: any,
   ) {
     return updateEvent(id, body);
   }
 
-  // ============================================
-  // UPDATE STATUS
-  // ============================================
+  
 
   @Patch(':id/status')
+  @ApiBearerAuth()
   async updateStatus(
     @Param('id') id: string,
-
     @Body() body: any,
   ) {
-    return updateEventStatus(
-      id,
-      body.status,
-    );
+    return updateEventStatus(id, body.status);
   }
 
-  // ============================================
-  // DELETE EVENT
-  // ============================================
-
+ 
   @Delete(':id')
-  async remove(
-    @Param('id') id: string,
-  ) {
+  @ApiBearerAuth()
+  async remove(@Param('id') id: string) {
     return deleteEvent(id);
   }
 }

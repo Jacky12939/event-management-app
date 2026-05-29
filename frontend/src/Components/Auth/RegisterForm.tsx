@@ -1,7 +1,6 @@
 // =============================================================
 // src/Components/Auth/RegisterForm.tsx
 // Formulaire d'inscription avec react-hook-form + Zod
-// Correction : import du schéma corrigé (chemin sans espace)
 // =============================================================
 
 import { useState } from "react";
@@ -11,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { register as registerApi } from "../../services/auth.service";
 import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 
-// ✅ Corrigé : chemin sans espace (après renommage du fichier)
+
 import { registerSchema, type RegisterFormData } from "./Register.schema";
 
 export default function RegisterForm() {
@@ -36,11 +35,7 @@ export default function RegisterForm() {
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");
 
-  /**
-   * Soumission du formulaire :
-   * - Zod valide les données avant l'appel API
-   * - En cas d'erreur backend, on affiche le message reçu
-   */
+
   const onSubmit = async (data: RegisterFormData) => {
     setApiError("");
     try {
@@ -57,9 +52,7 @@ export default function RegisterForm() {
     }
   };
 
-  /**
-   * Classe CSS dynamique selon l'état du champ (erreur / valide / neutre)
-   */
+  
   const inputClass = (error?: string, value?: string) => `
     w-full rounded-lg pl-10 py-3 border outline-none transition-all
     bg-white dark:bg-slate-800 dark:text-white
@@ -76,14 +69,14 @@ export default function RegisterForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <h1 className="text-3xl font-bold text-center">Créer un compte</h1>
 
-      {/* Message d'erreur API */}
+  
       {apiError && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded text-sm text-center font-medium">
           {apiError}
         </div>
       )}
 
-      {/* NOM */}
+     
       <div className="relative">
         <FaUser className="absolute left-3 top-4 text-gray-400" />
         <input
@@ -94,7 +87,7 @@ export default function RegisterForm() {
       </div>
       {errors.nom && <p className="text-red-500 text-sm">{errors.nom.message}</p>}
 
-      {/* PRÉNOM */}
+     
       <div className="relative">
         <FaUser className="absolute left-3 top-4 text-gray-400" />
         <input
@@ -105,7 +98,7 @@ export default function RegisterForm() {
       </div>
       {errors.prenom && <p className="text-red-500 text-sm">{errors.prenom.message}</p>}
 
-      {/* EMAIL */}
+     
       <div className="relative">
         <FaEnvelope className="absolute left-3 top-4 text-gray-400" />
         <input
@@ -116,7 +109,7 @@ export default function RegisterForm() {
       </div>
       {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
 
-      {/* MOT DE PASSE */}
+     
       <div className="relative">
         <FaLock className="absolute left-3 top-4 text-gray-400" />
         <input
@@ -135,7 +128,7 @@ export default function RegisterForm() {
       </div>
       {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
 
-      {/* CONFIRMATION MOT DE PASSE */}
+     
       <div className="relative">
         <FaLock className="absolute left-3 top-4 text-gray-400" />
         <input
@@ -156,7 +149,7 @@ export default function RegisterForm() {
         <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>
       )}
 
-      {/* BOUTON SUBMIT */}
+     
       <button
         type="submit"
         className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-medium transition-colors"

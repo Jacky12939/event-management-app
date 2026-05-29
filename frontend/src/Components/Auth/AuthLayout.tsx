@@ -23,7 +23,7 @@ export default function AuthLayout({
 
     <div className="relative min-h-screen overflow-hidden">
 
-      {/* Background image */}
+      
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
@@ -31,13 +31,12 @@ export default function AuthLayout({
         }}
       />
 
-      {/* Overlay transparent */}
       <div className="absolute inset-0 bg-black/45 dark:bg-black/60" />
 
-      {/* Contenu */}
+     
       <div className="relative z-10">
 
-        {/* Navbar */}
+     
         <nav className="flex items-center justify-between px-[8%] py-5 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md shadow-sm border-b border-slate-200 dark:border-slate-800">
 
           <Link
@@ -78,7 +77,7 @@ export default function AuthLayout({
 
         </nav>
 
-        {/* Form */}
+       
         <div className="flex items-center justify-center px-6 py-12">
 
           <div className="w-full max-w-md bg-white/80 dark:bg-[#1e293b]/80 backdrop-blur-md dark:text-white rounded-2xl shadow-lg p-8 transition-all">
