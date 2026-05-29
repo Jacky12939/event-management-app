@@ -3,12 +3,14 @@ import api from '../../services/api';
 import { useAuth } from '../../hooks/useAuth';
 import EventList from './EventList';
 import type { EventType } from './types/event';
+import EventModal from './EventModal';
 
 export default function MyEvents() {
   const { user } = useAuth();
-  const [events, setEvents]   = useState<EventType[]>([]);
+  const [events, setEvents] = useState<EventType[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [selected, setSelected] = useState<EventType | null>(null);
 
   const fetchMyEvents = async () => {
     if (!user?.id) {
@@ -32,6 +34,17 @@ export default function MyEvents() {
       fetchMyEvents();
     }
   }, [user]);
+
+  const handleDelete = async (id: string | number) => {
+    if (window.confirm("Voulez-vous vraiment supprimer cet événement ?")) {
+      try {
+        await api.delete(`/events/${id}`);
+        fetchMyEvents(); // Rafraîchit la liste après suppression
+      } catch (err) {
+        console.error("Erreur lors de la suppression:", err);
+      }
+    }
+  };
 
   if (loading) {
     return (
@@ -64,7 +77,22 @@ export default function MyEvents() {
           </p>
         </div>
       </div>
-      <EventList events={events} />
+
+      {/* On passe les fonctions à la liste */}
+      <EventList 
+        events={events} 
+        onEdit={setSelected} 
+        onDelete={handleDelete} 
+      />
+
+      {/* Affichage dynamique de la modale d'édition */}
+      {selected && (
+        <EventModal
+          event={selected}
+          onClose={() => setSelected(null)}
+          refresh={fetchMyEvents}
+        />
+      )}
     </div>
   );
 }
