@@ -7,18 +7,18 @@ interface Props {
 
 export default function EventForm({ onSuccess }: Props) {
   const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
   const [formData, setFormData] = useState({
-    title:       '',
+    title: '',
     description: '',
-    date:        '',
-    time:        '',
-    location:    '',
-    category:    '',
-    capacity:    0,
-    image:       '',
+    date: '',
+    time: '',
+    location: '',
+    category: '',
+    capacity: 0,
+    image: '',
   });
 
   const handleChange = (
@@ -39,23 +39,21 @@ export default function EventForm({ onSuccess }: Props) {
     try {
       setLoading(true);
 
-      //  Conversion date HTML + time → DateTime ISO complet requis par Prisma
       const isoDate = formData.date && formData.time
         ? new Date(`${formData.date}T${formData.time}:00`).toISOString()
         : formData.date
           ? new Date(formData.date).toISOString()
           : '';
 
-      //  organizerId retiré du body — le backend l'extrait du JWT automatiquement
       await api.post('/events', {
-        title:       formData.title,
+        title: formData.title,
         description: formData.description,
-        date:        isoDate,
-        time:        formData.time,
-        location:    formData.location,
-        category:    formData.category,
-        capacity:    formData.capacity,
-        image:       formData.image || undefined,
+        date: isoDate,
+        time: formData.time,
+        location: formData.location,
+        category: formData.category,
+        capacity: formData.capacity,
+        image: formData.image || undefined,
       });
 
       setSuccess(true);
@@ -66,8 +64,7 @@ export default function EventForm({ onSuccess }: Props) {
 
       if (onSuccess) onSuccess();
     } catch (err: any) {
-      const message =
-        err?.response?.data?.message || "Erreur lors de la création de l'événement";
+      const message = err?.response?.data?.message || "Erreur lors de la création de l'événement";
       setError(Array.isArray(message) ? message.join(', ') : message);
     } finally {
       setLoading(false);
@@ -75,105 +72,40 @@ export default function EventForm({ onSuccess }: Props) {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-lg space-y-5"
-    >
-      <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+    <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-xl space-y-6 border dark:border-gray-800">
+      <h2 className="text-2xl font-bold text-indigo-600">
         Créer un événement
       </h2>
 
+  
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
+        <div className="p-4 text-sm text-red-700 bg-red-50 dark:bg-red-900/30 dark:text-red-400 rounded-xl border border-red-100 dark:border-red-900/50">
           {error}
         </div>
       )}
+
+      
       {success && (
-        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl text-sm">
+        <div className="p-4 text-sm text-green-700 bg-green-50 dark:bg-green-900/30 dark:text-green-400 rounded-xl border border-green-100 dark:border-green-900/50">
           Événement créé avec succès !
         </div>
       )}
 
-      <div>
-        <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Titre *</label>
-        <input
-          type="text" name="title" value={formData.title}
-          onChange={handleChange} required
-          className="w-full p-3 rounded-xl border dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-        />
+      
+      <div className="grid md:grid-cols-2 gap-4">
+        <input name="title" value={formData.title} placeholder="Titre" onChange={handleChange} className="input" />
+        <input name="location" value={formData.location} placeholder="Lieu" onChange={handleChange} className="input" />
+        <input type="date" name="date" value={formData.date} onChange={handleChange} className="input" />
+        <input type="time" name="time" value={formData.time} onChange={handleChange} className="input" />
+        <input name="category" value={formData.category} placeholder="Catégorie" onChange={handleChange} className="input" />
+        <input type="number" name="capacity" value={formData.capacity || ''} placeholder="Capacité" onChange={handleChange} className="input" />
       </div>
 
-      <div>
-        <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Description *</label>
-        <textarea
-          name="description" value={formData.description}
-          onChange={handleChange} rows={4} required
-          className="w-full p-3 rounded-xl border dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-        />
-      </div>
+      <textarea name="description" value={formData.description} placeholder="Description" onChange={handleChange} className="input h-28" />
+      <input name="image" value={formData.image} placeholder="Image URL" onChange={handleChange} className="input" />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-        <div>
-          <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Date *</label>
-          <input
-            type="date" name="date" value={formData.date}
-            onChange={handleChange} required
-            className="w-full p-3 rounded-xl border dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-          />
-        </div>
-
-        <div>
-          <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Heure *</label>
-          <input
-            type="time" name="time" value={formData.time}
-            onChange={handleChange} required
-            className="w-full p-3 rounded-xl border dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-          />
-        </div>
-
-        <div>
-          <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Lieu *</label>
-          <input
-            type="text" name="location" value={formData.location}
-            onChange={handleChange} required
-            className="w-full p-3 rounded-xl border dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-          />
-        </div>
-
-        <div>
-          <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Catégorie *</label>
-          <input
-            type="text" name="category" value={formData.category}
-            onChange={handleChange} required placeholder="Concert, Conférence, Sport..."
-            className="w-full p-3 rounded-xl border dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-          />
-        </div>
-
-        <div>
-          <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Capacité *</label>
-          <input
-            type="number" name="capacity" value={formData.capacity} min={1}
-            onChange={handleChange} required
-            className="w-full p-3 rounded-xl border dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-          />
-        </div>
-
-        <div className="md:col-span-2">
-          <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Image URL (optionnel)</label>
-          <input
-            type="text" name="image" value={formData.image}
-            onChange={handleChange} placeholder="https://..."
-            className="w-full p-3 rounded-xl border dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-          />
-        </div>
-      </div>
-
-      <button
-        type="submit" disabled={loading}
-        className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white py-3 rounded-xl transition font-semibold"
-      >
-        {loading ? 'Création en cours...' : "Créer l'événement"}
+      <button disabled={loading} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed">
+        {loading ? "Création..." : "Créer l'événement"}
       </button>
     </form>
   );
