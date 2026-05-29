@@ -20,7 +20,9 @@ jobs:
 
       - name: Install backend dependencies
         working-directory: ./backend
-        run: npm ci
+        run: |
+          npm ci --include=dev
+          npm install -g @nestjs/cli
 
       - name: Install frontend dependencies
         working-directory: ./frontend
@@ -28,7 +30,7 @@ jobs:
 
       - name: Build backend
         working-directory: ./backend
-        run: npm run build 
+        run: npm run build
 
       - name: Build frontend
         working-directory: ./frontend
