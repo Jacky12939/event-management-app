@@ -16,15 +16,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Install backend dependencies
         working-directory: ./backend
-        run: npm install
+        run: |
+          npm ci --include=dev
+          npm install -g @nestjs/cli
 
       - name: Install frontend dependencies
         working-directory: ./frontend
-        run: npm install
+        run: npm ci
 
       - name: Build backend
         working-directory: ./backend
