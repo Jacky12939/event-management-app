@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 
-interface User {
+export interface User {
   id: string;
-  name: string;
-  firstname: string;
+  nom: string;
+  prenom: string;
   email: string;
-  role: string;
+  role: "attendee" | "organizer";
 }
 
 interface LoginResponse {
@@ -14,11 +14,20 @@ interface LoginResponse {
 }
 
 export function useAuth() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(() => {
+
+    const stored = localStorage.getItem("user");
+    try {
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  });
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let isMounted = true; // Sécurité pour éviter les fuites de mémoire sur les composants démontés
+    let isMounted = true;
     const token = localStorage.getItem("token");
 
     if (token) {
@@ -26,51 +35,50 @@ export function useAuth() {
         .then((res) => {
           if (isMounted) {
             setUser(res.data);
+            localStorage.setItem("user", JSON.stringify(res.data));
           }
         })
         .catch(() => {
           if (isMounted) {
             localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            setUser(null);
           }
         })
         .finally(() => {
-          if (isMounted) {
-            setLoading(false); // S'exécute de manière asynchrone après le retour de l'API
-          }
+          if (isMounted) setLoading(false);
         });
     } else {
-      // 🎯 CORRECTION : Utilisation de setTimeout pour basculer l'état au cycle d'événement suivant
-      // Cela évite de bloquer ou de forcer un rendu en cascade pendant le montage initial
       const timer = setTimeout(() => {
-        if (isMounted) {
-          setLoading(false);
-        }
+        if (isMounted) setLoading(false);
       }, 0);
-
       return () => clearTimeout(timer);
     }
 
-    return () => {
-      isMounted = false;
-    };
+    return () => { isMounted = false; };
   }, []);
 
   const login = async (email: string, password: string): Promise<User> => {
-    const response = await api.post<LoginResponse>("/auth/login", { email, password });
-    const { access_token } = response.data;
-
+    // Obtenir le token
+    const tokenResponse = await api.post<LoginResponse>("/auth/login", { email, password });
+    const { access_token } = tokenResponse.data;
     localStorage.setItem("token", access_token);
 
+    // Récupérer le profil complet
     const profileResponse = await api.get<User>("/auth/me");
     const loggedInUser = profileResponse.data;
 
+    //  Stocker l'objet user dans localStorage
+    localStorage.setItem("user", JSON.stringify(loggedInUser));
     setUser(loggedInUser);
     setLoading(false);
+
     return loggedInUser;
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setUser(null);
   };
 

@@ -1,13 +1,8 @@
-// =============================================================
-// src/routes/auth.ts
-// Contrôleur d'authentification NestJS
-// Ce fichier était correct — aucune modification nécessaire
-// =============================================================
 
 import {
   Controller, Post, Get, Body, Req,
   HttpStatus, HttpCode,
-  BadRequestException, UnauthorizedException, NotFoundException
+  BadRequestException, UnauthorizedException, NotFoundException,
 } from '@nestjs/common';
 import { AuthService } from '../services/authService';
 import { ApiTags, ApiOperation, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
@@ -18,10 +13,7 @@ import { Request } from 'express';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  /**
-   * POST /auth/register
-   * Inscription d'un nouvel utilisateur
-   */
+
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: "Inscription d'un nouvel utilisateur" })
@@ -29,7 +21,7 @@ export class AuthController {
     schema: {
       type: 'object',
       properties: {
-        email:    { type: 'string', example: 'jacky@example.com' },
+        email:    { type: 'string', example: 'jacky@gmeil.com' },
         password: { type: 'string', example: 'MonMotDePasse123!' },
         nom:      { type: 'string', example: 'Giresse' },
         prenom:   { type: 'string', example: 'Jacky' },
@@ -48,10 +40,7 @@ export class AuthController {
     }
   }
 
-  /**
-   * POST /auth/login
-   * Connexion et obtention du JWT
-   */
+ 
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: "Connexion de l'utilisateur" })
@@ -59,7 +48,7 @@ export class AuthController {
     schema: {
       type: 'object',
       properties: {
-        email:    { type: 'string', example: 'jacky@example.com' },
+        email:    { type: 'string', example: 'jacky@gmeil.com' },
         password: { type: 'string', example: 'MonMotDePasse123!' },
       },
     },
@@ -72,10 +61,7 @@ export class AuthController {
     return this.authService.login(user);
   }
 
-  /**
-   * GET /auth/me
-   * Retourne le profil de l'utilisateur connecté (JWT requis)
-   */
+  
   @Get('me')
   @ApiBearerAuth()
   @ApiOperation({ summary: "Récupérer le profil de l'utilisateur connecté" })
@@ -90,4 +76,6 @@ export class AuthController {
       throw new NotFoundException(err.message);
     }
   }
+
+  
 }

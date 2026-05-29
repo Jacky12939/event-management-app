@@ -13,16 +13,14 @@ export interface LoginData {
   password: string;
 }
 
-// Typage précis pour la réponse du Login
 export interface AuthResponse {
   access_token: string;
 }
 
-// Typage précis pour la réponse de l'Inscription (Register)
 export interface UserResponse {
   id: string;
-  name: string;
-  firstname: string;
+  nom: string;
+  prenom: string;
   email: string;
   role: "attendee" | "organizer";
   createdAt: string;
@@ -34,42 +32,25 @@ export interface RegisterResponse {
   user: UserResponse;
 }
 
-// Typage pour la réponse du changement de rôle
 export interface RoleUpdateResponse {
   message: string;
+  user?: UserResponse;
 }
 
-// ==========================================
-// 🚀 SERVICES D'APPELS API TYPÉS
-// ==========================================
-
-/**
- * Inscription d'un nouvel utilisateur
- */
 export const register = async (userData: RegisterData): Promise<RegisterResponse> => {
   const { nom, prenom, email, password } = userData;
-  
   const response = await api.post<RegisterResponse>("/auth/register", {
-    nom,
-    prenom,
-    email,
-    password
+    nom, prenom, email, password,
   });
-
   return response.data;
 };
 
-/**
- * Connexion de l'utilisateur
- */
 export const login = async (data: LoginData): Promise<AuthResponse> => {
   const response = await api.post<AuthResponse>("/auth/login", data);
   return response.data;
 };
 
-/**
- * Passage du rôle de l'utilisateur connecté à "organizer"
- */
+// Le JWT est envoyé automatiquement par l'intercepteur axios
 export const becomeOrganizer = async (): Promise<RoleUpdateResponse> => {
   const response = await api.post<RoleUpdateResponse>("/roles/become-organizer");
   return response.data;

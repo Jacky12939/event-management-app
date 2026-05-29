@@ -6,7 +6,7 @@ import * as jwt from 'jsonwebtoken';
 export class AuthMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
 
-    // Gestion CORS preflight
+    // Gestion CORS preflight 
     if (req.method === 'OPTIONS') {
       return next();
     }
@@ -28,6 +28,7 @@ export class AuthMiddleware implements NestMiddleware {
 
       const decoded = jwt.verify(token, jwtSecret);
 
+  
       (req as any).user = decoded;
 
       next();

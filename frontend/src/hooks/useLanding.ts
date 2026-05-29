@@ -1,4 +1,4 @@
-// hooks/useLanding.ts
+
 
 export function useLanding() {
 

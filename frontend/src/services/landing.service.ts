@@ -1,4 +1,4 @@
-// services/landing.service.ts
+
 
 import api from "./api";
 

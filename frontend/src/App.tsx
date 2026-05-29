@@ -11,7 +11,6 @@ import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
-import Events from "./pages/event";
 
 
 
@@ -44,10 +43,6 @@ export default function App(){
           element={<Dashboard/>}
         />
 
-        <Route
-          path="/events"
-          element={<Events/>}
-        />
 
       </Routes>
 
