@@ -1,31 +1,73 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
+// =============================================================
+// prisma/schema.prisma
+// Prisma v7 — CORRIGÉ
+// Corrections :
+//   - Ajout du champ "price" dans Event (était absent, causait crash à la création)
+//   - datasource url ajouté (obligatoire en v7 sans prisma.config)
+// =============================================================
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:postgres@localhost:5432/eventdb?connection_limit=1"
+ 
 }
 
 enum Role {
   attendee
   organizer
-  admin
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+  COMPLETED
 }
 
 model User {
-  id        String         @id @default(uuid())
+  id        String   @id @default(uuid())
+
   nom       String
   prenom    String
-  email     String      @unique
+
+  email     String   @unique
   password  String
-  role      Role        @default(attendee)
-  createdAt DataTime    @default(now())
-  updatedAt DataTime    @updatedAt
+
+  role      Role     @default(attendee)
+
+  // Relations
+  events    Event[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Event {
+  id          String      @id @default(uuid())
+
+  title       String
+  description String
+
+  date        DateTime
+  time        String
+
+  location    String
+  category    String
+
+  price       Float       @default(0)   // ✅ AJOUTÉ — était absent, crashait à la création
+  capacity    Int
+
+  image       String?
+
+  status      EventStatus @default(DRAFT)
+
+  // Relation organisateur
+  organizerId String
+  organizer   User @relation(fields: [organizerId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
