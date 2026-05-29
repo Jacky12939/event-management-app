@@ -1,16 +1,8 @@
-// =============================================================
-// src/services/authService.ts
-// Service d'authentification : register, validateUser, login, getProfile
-// Corrections :
-//   - Ajout de validateUser() (manquante → crash login)
-//   - Ajout de getProfile() (manquante → crash /auth/me)
-//   - Import prisma corrigé (chemin sans espace)
-// =============================================================
 
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
-import prisma from '../lib/prisma'; // ✅ Corrigé : chemin sans espace
+import prisma from '../lib/prisma'; 
 
 @Injectable()
 export class AuthService {
@@ -22,7 +14,6 @@ export class AuthService {
   async register(data: any) {
     const { nom, prenom, email, password } = data;
 
-    // Vérifie si l'email est déjà utilisé
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
@@ -36,14 +27,13 @@ export class AuthService {
     // Crée l'utilisateur avec les champs alignés sur le schéma Prisma
     const user = await prisma.user.create({
       data: {
-        nom,     // ✅ Aligné avec schema.prisma
-        prenom,  // ✅ Aligné avec schema.prisma
+        nom,     
+        prenom, 
         email,
         password: hashedPassword,
       },
     });
 
-    // On ne retourne jamais le mot de passe au client
     const { password: _pwd, ...safeUser } = user;
     return safeUser;
   }
@@ -51,7 +41,6 @@ export class AuthService {
   /**
    * Vérifie les identifiants de connexion
    * Retourne l'utilisateur si valide, null sinon
-   * ✅ Méthode manquante ajoutée
    */
   async validateUser(email: string, password: string) {
     const user = await prisma.user.findUnique({ where: { email } });
@@ -81,7 +70,6 @@ export class AuthService {
 
   /**
    * Récupère le profil de l'utilisateur connecté à partir de son ID
-   * ✅ Méthode manquante ajoutée
    */
   async getProfile(userId: string) {
     const user = await prisma.user.findUnique({
@@ -92,7 +80,6 @@ export class AuthService {
       throw new Error('Utilisateur introuvable');
     }
 
-    // On ne retourne jamais le mot de passe
     const { password: _pwd, ...safeUser } = user;
     return safeUser;
   }

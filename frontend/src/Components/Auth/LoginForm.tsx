@@ -18,7 +18,7 @@ export default function LoginForm() {
       await login(email, password);
       navigate("/dashboard");
     } catch (err: unknown) {
-      // 🎯 Validation stricte pour calmer le linter TypeScript
+     
       if (err && typeof err === "object" && "response" in err) {
         const axiosError = err as { response?: { data?: { message?: string } } };
         setError(axiosError.response?.data?.message || "Identifiants incorrects");
@@ -35,7 +35,7 @@ export default function LoginForm() {
         <p className="text-gray-500 text-center mt-2">Bon retour</p>
       </div>
 
-      {/* Affichage des erreurs de connexion */}
+     
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded text-sm text-center font-medium">
           {error}
