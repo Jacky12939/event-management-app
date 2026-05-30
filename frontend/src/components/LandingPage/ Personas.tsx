@@ -85,12 +85,6 @@ export default function Personas(){
               className={`${persona.bg} rounded-[30px] p-10 transition-all hover:-translate-y-2`}
             >
 
-              <div className="text-6xl mb-8">
-
-                {persona.emoji}
-
-              </div>
-
               <h2 className="text-2xl font-extrabold dark:text-white">
 
                 {persona.name}

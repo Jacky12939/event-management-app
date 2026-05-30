@@ -1,4 +1,4 @@
-import OrganizerDashboard from "../Components/Dashboard/OrganizerDashboard";
+import OrganizerDashboard from "../components/Dashboard/OrganizerDashboard";
 export default function Dashboard(){
 
     return(

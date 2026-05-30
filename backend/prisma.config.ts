@@ -1,8 +1,18 @@
-import { defineCdnfig } from "@prisma/config";
+
+
+import { defineConfig } from '@prisma/config';
+import 'dotenv/config';
 
 export default defineConfig({
-  earlyAccess: true,
-  datasource:{
-   url: process.env.DATABASE_URL || "postgresql://postgres:postgres@localhost:5432/eventdb"
- }
+  schema: './prisma/schema.prisma',
+
+  // Requis pour que "prisma migrate dev" trouve la base
+  datasource: {
+    url: process.env.DATABASE_URL as string,
+  },
+
+
+  migrations: {
+    path: './prisma/migrations',
+  },
 });
