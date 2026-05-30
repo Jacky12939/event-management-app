@@ -12,7 +12,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
- 
+  url      = env("DATABASE_URL")
 }
 
 enum Role {
@@ -40,6 +40,7 @@ model User {
 
   // Relations
   events    Event[]
+  registrations Registration[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -67,7 +68,25 @@ model Event {
   // Relation organisateur
   organizerId String
   organizer   User @relation(fields: [organizerId], references: [id])
+  registrations Registration[]
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Registration {
+  id         String   @id @default(uuid())
+
+  eventId    String
+  event      Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  attendeeId String
+  attendee   User     @relation(fields: [attendeeId], references: [id], onDelete: Cascade)
+
+  ticketCode String   @unique
+  checkedIn  Boolean  @default(false)
+
+  createdAt  DateTime @default(now())
+
+  @@unique([eventId, attendeeId])
 }

@@ -1,55 +1,33 @@
-// src/App.tsx
+// =============================================================
+// frontend/src/App.tsx
+// =============================================================
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
-import Events from "./pages/Events";
-import EventsPage from "./pages/participant/EventsPage";
 import CheckerPage from "./pages/checkerPage";
-import MyTicket from "./pages/MyTicket";
-import OrganizerPage from "./pages/OrganizerPage";
+import EventDetail from "./pages/EventDetail";
+import TicketPage from "./pages/TicketPage";
+import MyTickets from "./pages/MyTickets";
+import EventsPage from "./pages/EventsPage";
+import ProfilePage from "./pages/ProfilPage";
 
-
-export default function App(){
+export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-
-        <Route
-          path="/"
-          element={<Landing/>}
-        />
-
-        <Route
-          path="/login"
-          element={<Login/>}
-        />
-
-        <Route
-          path="/register"
-          element={<Register/>}
-        />
-
-        <Route
-          path="/dashboard"
-          element={<Dashboard/>}
-        />
-
-        <Route
-          path="/organisateur"
-          element={<Events/>}
-        />
-
-        <Route
-          path="/participant"
-          element={<EventsPage/>}
-        />
-
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/checker" element={<CheckerPage />} />
-        <Route path="/my-tickets" element={<MyTicket />} />
-        <Route path="/organisateur" element={<OrganizerPage />} />
+        <Route path="/events" element={<EventsPage />} />
+        <Route path="/events/:id" element={<EventDetail />} />
+        <Route path="/ticket/:ticketCode" element={<TicketPage />} />
+        <Route path="/my-tickets" element={<MyTickets />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </BrowserRouter>
   );
