@@ -1,29 +1,20 @@
-// App.tsx
+// src/App.tsx
 
-import {
-  BrowserRouter,
-  Routes,
-  Route
-}
-from "react-router-dom";
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Events from "./pages/Events";
 import EventsPage from "./pages/participant/EventsPage";
-
-
-
+import CheckerPage from "./pages/checkerPage";
+import MyTicket from "./pages/MyTicket";
+import OrganizerPage from "./pages/OrganizerPage";
 
 
 export default function App(){
-
-  return(
-
+  return (
     <BrowserRouter>
-
       <Routes>
 
         <Route
@@ -56,10 +47,10 @@ export default function App(){
           element={<EventsPage/>}
         />
 
+        <Route path="/checker" element={<CheckerPage />} />
+        <Route path="/my-tickets" element={<MyTicket />} />
+        <Route path="/organisateur" element={<OrganizerPage />} />
       </Routes>
-
     </BrowserRouter>
-
-  )
-
+  );
 }

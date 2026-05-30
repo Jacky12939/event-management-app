@@ -116,12 +116,12 @@ export default function OrganizerDashboard() {
                 <h3 className="font-bold dark:text-white">Organisateur</h3>
               </Link>
 
-              <Link to="/participant" className="flex-1 bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-lg hover:-translate-y-2 hover:shadow-xl transition-all">
+              <Link to="/my-tickets" className="flex-1 bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-lg hover:-translate-y-2 hover:shadow-xl transition-all">
                 <div className="w-14 h-14 rounded-xl bg-cyan-100 flex items-center justify-center text-cyan-600 text-2xl mb-4"><FaUsers /></div>
                 <h3 className="font-bold dark:text-white">Participant</h3>
               </Link>
 
-              <Link to="/controle" className="flex-1 bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-lg hover:-translate-y-2 hover:shadow-xl transition-all">
+              <Link to="/checker" className="flex-1 bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-lg hover:-translate-y-2 hover:shadow-xl transition-all">
                 <div className="w-14 h-14 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600 text-2xl mb-4"><FaQrcode /></div>
                 <h3 className="font-bold dark:text-white">Contrôle</h3>
               </Link>
