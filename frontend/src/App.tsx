@@ -12,6 +12,7 @@ import EventDetail from "./pages/EventDetail";
 import TicketPage from "./pages/TicketPage";
 import MyTickets from "./pages/MyTickets";
 import EventsPage from "./pages/EventsPage";
+import ProfilePage from "./pages/ProfilPage";
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
         <Route path="/events/:id" element={<EventDetail />} />
         <Route path="/ticket/:ticketCode" element={<TicketPage />} />
         <Route path="/my-tickets" element={<MyTickets />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </BrowserRouter>
   );
