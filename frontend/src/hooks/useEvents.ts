@@ -5,7 +5,7 @@ import { getEvents }
 from "../services/event.service";
 
 import type { EventType }
-from "../Components/Event/types/event";
+from "../components/Event/types/event";
 
 export default function useEvents() {
 

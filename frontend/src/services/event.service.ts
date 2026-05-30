@@ -1,4 +1,4 @@
-import type { EventType } from "../Components/Event/types/event";
+import type { EventType } from "../components/Event/types/event";
 import api from "./api";
 
 

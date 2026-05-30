@@ -39,9 +39,9 @@ const MyTicket = () => {
             padding: "16px",
             marginBottom: "16px"
           }}>
-            <h3>🎫 {reg.event?.title}</h3>
-            <p>📅 {new Date(reg.event?.date).toLocaleDateString()}</p>
-            <p>📍 {reg.event?.location}</p>
+            <h3> {reg.event?.title}</h3>
+            <p> {new Date(reg.event?.date).toLocaleDateString()}</p>
+            <p> {reg.event?.location}</p>
             <p>Code : <strong>{reg.ticketCode}</strong></p>
             {reg.qrCode && (
               <img src={reg.qrCode} alt="QR Code" width={200} />

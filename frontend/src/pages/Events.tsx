@@ -1,6 +1,6 @@
 
-import EventForm from "../Components/Event/EventForm";
-import EventLayout from "../Components/Event/EventLayout";
+import EventForm from "../components/Event/EventForm";
+import EventLayout from "../components/Event/EventLayout";
 export default function Events(){
   
  return (

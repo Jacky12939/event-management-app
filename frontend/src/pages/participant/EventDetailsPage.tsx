@@ -11,8 +11,8 @@ import {
 import {
   getEventById,
 } from "../../services/event.service";
-import type { EventType } from "../../Components/Event/types/event";
-import ParticipantLayout from "../../Components/Participant/ParticipantLayout";
+import type { EventType } from "../../components/Event/types/event";
+import ParticipantLayout from "../../components/Participant/ParticipantLayout";
 
 
 

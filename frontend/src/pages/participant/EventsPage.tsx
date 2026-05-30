@@ -3,11 +3,11 @@ from "react";
 
 import useEvents
 from "../../hooks/useEvents";
-import ParticipantLayout from "../../Components/Participant/ParticipantLayout";
-import EventSearch from "../../Components/Participant/EventSearch";
-import EventFilters from "../../Components/Participant/EventFilters";
-import EventCard from "../../Components/Participant/EventCard";
-import EmptyState from "../../Components/Participant/EmptyState";
+import ParticipantLayout from "../../components/Participant/ParticipantLayout";
+import EventSearch from "../../components/Participant/EventSearch";
+import EventFilters from "../../components/Participant/EventFilters";
+import EventCard from "../../components/Participant/EventCard";
+import EmptyState from "../../components/Participant/EmptyState";
 
 export default function EventsPage() {
 
