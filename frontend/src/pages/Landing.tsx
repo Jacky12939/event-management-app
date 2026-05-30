@@ -1,14 +1,14 @@
 // pages/Landing.tsx
 
 
-import Features from "../Components/LandingPage/ Features";
-import HowItWorks from "../Components/LandingPage/ HowItWorks";
-import Navbar from "../Components/LandingPage/ Navbar";
-import Personas from "../Components/LandingPage/ Personas";
-import CTA from "../Components/LandingPage/CTA";
-import DashboardPreview from "../Components/LandingPage/DashboardPreview";
-import Footer from "../Components/LandingPage/Footer";
-import Hero from "../Components/LandingPage/Hero";
+import Features from "../components/LandingPage/ Features";
+import HowItWorks from "../components/LandingPage/ HowItWorks";
+import Navbar from "../components/LandingPage/ Navbar";
+import Personas from "../components/LandingPage/ Personas";
+import CTA from "../components/LandingPage/CTA";
+import DashboardPreview from "../components/LandingPage/DashboardPreview";
+import Footer from "../components/LandingPage/Footer";
+import Hero from "../components/LandingPage/Hero";
 
 export default function Landing(){
 
