@@ -8,7 +8,6 @@ interface QRScannerProps {
 }
 
 export default function QRScanner({ onScan, onError }: QRScannerProps) {
-  const [hasCamera, setHasCamera] = useState(false);
   const [scanning, setScanning] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -24,7 +23,6 @@ export default function QRScanner({ onScan, onError }: QRScannerProps) {
         videoRef.current.play();
       }
       setScanning(true);
-      setHasCamera(true);
     } catch {
       onError?.("Impossible d'accéder à la caméra");
     }
@@ -35,7 +33,6 @@ export default function QRScanner({ onScan, onError }: QRScannerProps) {
     setScanning(false);
   };
 
-  // Simulation scan (remplace par html5-qrcode si besoin)
   const handleManualInput = () => {
     const val = prompt("Entrer le contenu du QR code (test) :");
     if (val) onScan(val);

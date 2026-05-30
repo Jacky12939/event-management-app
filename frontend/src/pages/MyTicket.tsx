@@ -1,18 +1,30 @@
-import { useEffect, useState } from "react";
-import { getMyRegistrations } from "../services/registration.service";
+import { useState } from "react";
+
+const MOCK_REGISTRATIONS = [
+  {
+    id: "reg-001",
+    ticketCode: "TICKET-001-ABC",
+    qrCode: "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TICKET-001-ABC",
+    event: {
+      title: "Concert Jazz Yaoundé",
+      date: "2026-06-15",
+      location: "Palais des Congrès, Yaoundé",
+    },
+  },
+  {
+    id: "reg-002",
+    ticketCode: "TICKET-002-DEF",
+    qrCode: "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TICKET-002-DEF",
+    event: {
+      title: "Tech Summit Douala 2026",
+      date: "2026-07-20",
+      location: "Hôtel Akwa Palace, Douala",
+    },
+  },
+];
 
 const MyTicket = () => {
-  const [registrations, setRegistrations] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    getMyRegistrations()
-      .then(setRegistrations)
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) return <p>Chargement...</p>;
+  const registrations = MOCK_REGISTRATIONS;
 
   return (
     <div style={{ padding: "20px" }}>

@@ -9,6 +9,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import CheckerPage from "./pages/checkerPage"; // ← nouveau
 import MyTicket from "./pages/MyTicket";
+import OrganizerPage from "./pages/OrganizerPage";
 export default function App() {
   return (
     <BrowserRouter>
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/checker" element={<CheckerPage />} />
         <Route path="/my-tickets" element={<MyTicket />} />
+        <Route path="/organisateur" element={<OrganizerPage />} />
       </Routes>
     </BrowserRouter>
   );
