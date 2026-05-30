@@ -1,112 +1,92 @@
-import { useState } from 'react';
-import api from '../../services/api';
+import { Link } from 'react-router-dom';
+import { 
+  FaCalendarAlt, 
+  FaMapMarkerAlt, 
+  FaPencilAlt, 
+  FaTrashAlt 
+} from 'react-icons/fa';
+import type { EventType } from './types/event';
 
 interface Props {
-  onSuccess?: () => void;
+  event: EventType;
+  onEdit: (event: EventType) => void;
+  onDelete: (id: string | number) => void;
 }
 
-export default function EventForm({ onSuccess }: Props) {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
-
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    date: '',
-    time: '',
-    location: '',
-    category: '',
-    capacity: 0,
-    image: '',
-  });
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
-  ) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: (name === 'capacity' || name === 'price') ? Number(value) : value,
-    });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setSuccess(false);
-
-    try {
-      setLoading(true);
-
-      const isoDate = formData.date && formData.time
-        ? new Date(`${formData.date}T${formData.time}:00`).toISOString()
-        : formData.date
-          ? new Date(formData.date).toISOString()
-          : '';
-
-      await api.post('/events', {
-        title: formData.title,
-        description: formData.description,
-        date: isoDate,
-        time: formData.time,
-        location: formData.location,
-        category: formData.category,
-        capacity: formData.capacity,
-        image: formData.image || undefined,
-      });
-
-      setSuccess(true);
-      setFormData({
-        title: '', description: '', date: '', time: '',
-        location: '', category: '', capacity: 0, image: '',
-      });
-
-      if (onSuccess) onSuccess();
-    } catch (err: any) {
-      const message = err?.response?.data?.message || "Erreur lors de la création de l'événement";
-      setError(Array.isArray(message) ? message.join(', ') : message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+export default function EventCard({ event, onEdit, onDelete }: Props) {
   return (
-    <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-xl space-y-6 border dark:border-gray-800">
-      <h2 className="text-2xl font-bold text-indigo-600">
-        Créer un événement
-      </h2>
-
-  
-      {error && (
-        <div className="p-4 text-sm text-red-700 bg-red-50 dark:bg-red-900/30 dark:text-red-400 rounded-xl border border-red-100 dark:border-red-900/50">
-          {error}
-        </div>
-      )}
-
+    <div className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 border border-gray-200 dark:border-gray-800 flex flex-col justify-between">
+      <div>
       
-      {success && (
-        <div className="p-4 text-sm text-green-700 bg-green-50 dark:bg-green-900/30 dark:text-green-400 rounded-xl border border-green-100 dark:border-green-900/50">
-          Événement créé avec succès !
+        <div className="relative">
+          <img
+            src={event.image || 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30'}
+            alt={event.title}
+            className="h-52 w-full object-cover"
+          />
+         
+          <span className="absolute top-3 left-3 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100/90 text-blue-700 dark:bg-blue-900/90 dark:text-blue-200 backdrop-blur-sm">
+            {event.category}
+          </span>
         </div>
-      )}
 
-      
-      <div className="grid md:grid-cols-2 gap-4">
-        <input name="title" value={formData.title} placeholder="Titre" onChange={handleChange} className="input" />
-        <input name="location" value={formData.location} placeholder="Lieu" onChange={handleChange} className="input" />
-        <input type="date" name="date" value={formData.date} onChange={handleChange} className="input" />
-        <input type="time" name="time" value={formData.time} onChange={handleChange} className="input" />
-        <input name="category" value={formData.category} placeholder="Catégorie" onChange={handleChange} className="input" />
-        <input type="number" name="capacity" value={formData.capacity || ''} placeholder="Capacité" onChange={handleChange} className="input" />
+        <div className="p-5 space-y-4">
+        
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white line-clamp-1">
+            {event.title}
+          </h2>
+
+         
+          <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-3">
+            {event.description}
+          </p>
+
+          
+          <div className="space-y-2 pt-1">
+            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+              <FaCalendarAlt className="text-blue-500" />
+              <span>{new Date(event.date).toLocaleDateString()}</span>
+            </div>
+
+            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+              <FaMapMarkerAlt className="text-blue-500" />
+              <span className="line-clamp-1">{event.location}</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <textarea name="description" value={formData.description} placeholder="Description" onChange={handleChange} className="input h-28" />
-      <input name="image" value={formData.image} placeholder="Image URL" onChange={handleChange} className="input" />
+  
+      <div className="px-5 pb-5 pt-2 space-y-3">
+     
+        <Link
+          to={`/events/${event.id}`}
+          className="block text-center bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl font-medium transition duration-200"
+        >
+          Voir détails
+        </Link>
 
-      <button disabled={loading} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed">
-        {loading ? "Création..." : "Créer l'événement"}
-      </button>
-    </form>
+        <hr className="border-gray-100 dark:border-gray-800" />
+
+       
+        <div className="flex justify-between items-center text-sm font-medium">
+          <button
+            onClick={() => onEdit(event)}
+            className="flex items-center gap-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition"
+          >
+            <FaPencilAlt size={14} />
+            <span>Modifier</span>
+          </button>
+
+          <button
+            onClick={() => onDelete(event.id)}
+            className="flex items-center gap-2 text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 transition"
+          >
+            <FaTrashAlt size={14} />
+            <span>Supprimer</span>
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

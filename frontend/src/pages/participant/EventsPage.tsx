@@ -118,7 +118,7 @@ export default function EventsPage() {
           </h1>
 
           <button
-  className="w-1/4
+  className="w-
     mt-4
     bg-white
     text-black
